@@ -5,7 +5,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace('Login');
-    }, 3000); // Navigate to login after 3 seconds
+    }, 3000); 
   }, []);
 
   return (
@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
   overlay: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
   title: { fontSize: 24, fontWeight: 'bold', color: '#FFF', marginBottom: 20 },
   subtitle: {
-    fontSize: 20, // Increased font size
-    fontWeight: 'bold', // Made the text bold
-    color: '#FFD700', // Changed the color to a golden shade
-    textAlign: 'center', // Center align the text
+    fontSize: 20, 
+    fontWeight: 'bold', 
+    color: '#FFD700', 
+    textAlign: 'center', 
     marginBottom: 20,
   },
   button: { backgroundColor: '#007BFF', padding: 10, borderRadius: 5 },
