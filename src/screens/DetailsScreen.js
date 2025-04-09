@@ -8,20 +8,22 @@ const DetailsScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (route.params) {
       const newProject = route.params;
+      const { index } = newProject;
+  
       setProjects((prevProjects) => {
-        // Check if the project already exists (using projectNumber as a unique key)
-        const index = prevProjects.findIndex((p) => p.projectNumber === newProject.projectNumber);
-        if (index !== -1) {
+        if (index !== undefined && index !== null) {
           // Update existing project
-          const updatedProjects = [...prevProjects];
-          updatedProjects[index] = newProject;
-          return updatedProjects;
+          const updated = [...prevProjects];
+          updated[index] = newProject;
+          return updated;
+        } else {
+          // Add new project
+          return [...prevProjects, newProject];
         }
-        // Add new project
-        return [...prevProjects, newProject];
       });
     }
   }, [route.params]);
+  
 
   const handleEdit = (index) => {
     const projectToEdit = projects[index];

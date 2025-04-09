@@ -1,75 +1,77 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
-const ProjectDetailsScreen = ({ navigation }) => {
+const ProjectDetailsScreen = ({ navigation, route }) => {
   const [projectName, setProjectName] = useState('');
   const [projectNumber, setProjectNumber] = useState('');
   const [reportNumber, setReportNumber] = useState('');
   const [workCompleted, setWorkCompleted] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [weather, setWeather] = useState('');
+  const [editIndex, setEditIndex] = useState(null);
+
+  // If editing, pre-fill the form
+  useEffect(() => {
+    if (route.params) {
+      const {
+        projectName,
+        projectNumber,
+        reportNumber,
+        workCompleted,
+        targetDate,
+        weather,
+        index
+      } = route.params;
+
+      setProjectName(projectName || '');
+      setProjectNumber(projectNumber || '');
+      setReportNumber(reportNumber || '');
+      setWorkCompleted(workCompleted || '');
+      setTargetDate(targetDate || '');
+      setWeather(weather || '');
+      setEditIndex(index ?? null);
+    }
+  }, [route.params]);
 
   const handleNext = () => {
-    navigation.navigate('Details', {
+    const updatedProject = {
       projectName,
       projectNumber,
       reportNumber,
       workCompleted,
       targetDate,
-      weather,
+      weather
+    };
+
+    // Show success message
+    if (editIndex !== null) {
+      Alert.alert('Success', 'Successfully updated!');
+    } else {
+      Alert.alert('Success', 'Project added successfully!');
+    }
+
+    // Navigate and pass project data + index (if editing)
+    navigation.navigate('Details', {
+      ...updatedProject,
+      index: editIndex
     });
   };
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backButtonText}>←</Text>
       </TouchableOpacity>
 
       <Text style={styles.title}>Project Details</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Project Name"
-        value={projectName}
-        onChangeText={setProjectName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Project Number"
-        keyboardType="numeric"
-        value={projectNumber}
-        onChangeText={setProjectNumber}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Report Number"
-        keyboardType="numeric"
-        value={reportNumber}
-        onChangeText={setReportNumber}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="% of Work Completed (This Month)"
-        keyboardType="numeric"
-        value={workCompleted}
-        onChangeText={setWorkCompleted}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Target Date (YYYY-MM-DD)"
-        value={targetDate}
-        onChangeText={setTargetDate}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Weather"
-        value={weather}
-        onChangeText={setWeather}
-      />
+      <TextInput style={styles.input} placeholder="Project Name" value={projectName} onChangeText={setProjectName} />
+      <TextInput style={styles.input} placeholder="Project Number" keyboardType="numeric" value={projectNumber} onChangeText={setProjectNumber} />
+      <TextInput style={styles.input} placeholder="Report Number" keyboardType="numeric" value={reportNumber} onChangeText={setReportNumber} />
+      <TextInput style={styles.input} placeholder="% of Work Completed (This Month)" keyboardType="numeric" value={workCompleted} onChangeText={setWorkCompleted} />
+      <TextInput style={styles.input} placeholder="Target Date (YYYY-MM-DD)" value={targetDate} onChangeText={setTargetDate} />
+      <TextInput style={styles.input} placeholder="Weather" value={weather} onChangeText={setWeather} />
 
-      {/* Next Button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
